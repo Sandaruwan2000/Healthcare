@@ -100,7 +100,7 @@ export default function App() {
 
        <Route path="/admin" element={<Admin />} />
 
-       <Route path="/prescription" element={<Prescription />} />
+       <Route path="patient/prescription/:patientId" element={<Prescription />} />
        
        <Route path="/prescription/editMedicine/:id" element={<EditMedicine />} />
 

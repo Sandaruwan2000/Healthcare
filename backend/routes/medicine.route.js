@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 router.post('/createMedicine',createMedicine);
-router.get('/getAllMedicine',getAllMedicine);
+router.get('/getAllMedicine/:patientId',getAllMedicine);
 router.get('/oneMedicine/:id',oneMedicine);
 router.put('/updateMedicine/:id',updateMedicine);
 router.delete('/deleteMedicine/:id',deleteMedicine);

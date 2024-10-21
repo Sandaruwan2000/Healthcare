@@ -11,6 +11,7 @@ import diagnosisRoutes from './routes/diagnosis.route.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
+import cors from 'cors';
 
 
 mongoose.connect(process.env.MONGO).then(() => {
@@ -25,7 +26,12 @@ mongoose.connect(process.env.MONGO).then(() => {
 const app = express();
 
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
+});
 
+app.use(cors());
 app.use(cookieParser()) ;
 
 app.listen(3000, () => {

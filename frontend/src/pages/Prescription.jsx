@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Admindashboard from '../components/Admindashboard';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import m1 from '../Image/m1.jpg';
 import { Button } from 'flowbite-react';
@@ -14,26 +14,28 @@ const styles = {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     width: '100%',
-    height: '100vh', // Ensuring full height
+    height: '100vh', 
 };
 
 export default function Prescription() {
+    const { patientId } = useParams();
     const [formData, setFormData] = useState([]);
     const [query, setQuery] = useState('');
     const [isFormVisible, setIsFormVisible] = useState(false); // State for form visibility
     const [newMedicine, setNewMedicine] = useState({
+        patientId: patientId,
         medicinename: '',
         dosage: '',
         frequency: '',
         duration: '',
         instruction: '',
-        date: '',
+       
     });
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get('/backend/medicine/getAllMedicine');
+                const res = await axios.get(`/backend/medicine/getAllMedicine/${patientId}`);
                 setFormData(res.data);
             } catch (error) {
                 console.log(error.message);
@@ -111,7 +113,7 @@ export default function Prescription() {
             medicine.frequency,
             medicine.duration,
             medicine.instruction,
-            new Date(medicine.date).toLocaleDateString(),
+            new Date(medicine.createdAt).toLocaleDateString(),
             
         ]);
 
@@ -179,7 +181,7 @@ export default function Prescription() {
                                 <td className='border px-4 py-2'>{medicine.frequency}</td>
                                 <td className='border px-4 py-2'>{medicine.duration}</td>
                                 <td className='border px-4 py-2'>{medicine.instruction}</td>
-                                <td className='border px-4 py-2'>{new Date(medicine.date).toLocaleDateString()}</td>
+                                <td className='border px-4 py-2'>{new Date(medicine.createdAt).toLocaleDateString()}</td>
                                 <td className='border px-4 py-2'>
                                     <Link to={`/prescription/editMedicine/${medicine._id}`}>
                                         <FaEdit className='text-blue-500 hover:text-blue-700 cursor-pointer' />
@@ -268,7 +270,7 @@ export default function Prescription() {
                                     required
                                 />
                             </div>
-                            <div className="mb-4">
+                            {/* <div className="mb-4">
                                 <label className="block text-gray-700">Date:</label>
                                 <input
                                     type="date"
@@ -278,7 +280,7 @@ export default function Prescription() {
                                     onChange={handleInputChange}
                                     required
                                 />
-                            </div>
+                            </div> */}
                             <div className="flex justify-between">
                                 <button type="submit" className="bg-blue-500 text-white py-2 px-6 rounded-lg">
                                     Submit

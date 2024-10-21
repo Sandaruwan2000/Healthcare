@@ -1,17 +1,43 @@
 import Patient from "../models/patients.model.js";
 
-export const createPatient = async (req , res , next) => {
+// export const createPatient = async (req , res , next) => {
    
-    try {
-    const newPatient = await Patient.create(req.body);
+//     try {
+//     const newPatient = await Patient.create(req.body);
  
-     return res.status(201).json(newPatient)
+//      return res.status(201).json(newPatient)
  
-    }catch(error){
-     next(error);
-    }
+//     }catch(error){
+//      next(error);
+//     }
  
+//  };
+
+
+export const createPatient = async (req, res, next) => {
+   try {
+     // Check if patientId is missing
+     if (!req.body.patientId) {
+       return res.status(400).json({ message: "patientId is required" });
+     }
+ 
+     // Check if the patient already exists (based on patientId)
+     const existingPatient = await Patient.findOne({ patientId: req.body.patientId });
+     if (existingPatient) {
+       return res.status(409).json({ message: "Patient already exists" });
+     }
+ 
+     // Create a new patient
+     const newPatient = await Patient.create(req.body);
+     return res.status(201).json(newPatient);
+   } catch (error) {
+     console.error("Error creating patient:", error); // Log the error for debugging
+     return res.status(500).json({ message: "Internal Server Error" }); // Send a custom error message
+   }
  };
+ 
+ 
+ 
 
  export const getAllPatient = async (req , res , next) => {
     try{
